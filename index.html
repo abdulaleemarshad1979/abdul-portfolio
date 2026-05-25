@@ -783,6 +783,70 @@
             transform: translate(-2px, -2px) scale(0.96);
         }
     }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOBILE PERFORMANCE OVERRIDES
+       Kill expensive effects to keep scrolling buttery-smooth on phones.
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px), (pointer: coarse) {
+        /* Native momentum scrolling beats custom smooth scroll on mobile */
+        html { scroll-behavior: auto; }
+
+        /* Drop ALL backdrop-filter blurs — biggest perf win on mobile */
+        .glass-nav,
+        .glass-card-v2,
+        .glass-card,
+        #mobile-drawer,
+        #drawer-backdrop,
+        .live-pill,
+        .hamburger,
+        #liquid-scrollbar .lg-rail,
+        .bg-surface\/40,
+        .backdrop-blur,
+        .backdrop-blur-md,
+        .backdrop-blur-2xl {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        .glass-nav { background: rgba(250,250,245,0.95); }
+        .glass-card-v2 { background: rgba(255,255,255,0.85); }
+        #mobile-drawer { background: #fafaf5; }
+
+        /* Kill infinite background animations — they repaint constantly */
+        .aurora .blob { animation: none !important; }
+        .glass-nav::before { animation: none !important; display: none; }
+        .brand-word { animation: none !important; -webkit-text-fill-color: #1a1c19; background: none; color: #1a1c19; }
+        .stat-num { animation: none !important; }
+        .work-item-reveal .gradient-ring { animation: none !important; display: none; }
+        .float-y { animation: none !important; }
+        .brushed-aluminum::after { display: none; }
+
+        /* Noise overlay is a paint hog — drop it on mobile */
+        .noise-overlay { display: none !important; }
+
+        /* Lighten aurora — keep visual identity, lose the perf cost */
+        .aurora .blob { filter: blur(28px); opacity: 0.22; }
+
+        /* Section paint optimization — skip painting offscreen sections */
+        section { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
+
+        /* Promote sections to their own layer for cheaper scroll compositing */
+        section, header, footer { transform: translateZ(0); }
+
+        /* Reduce live-dot pulse cost */
+        .live-dot { animation-duration: 2.4s; }
+
+        /* Brand caret blink only on desktop */
+        .brand-caret { animation: none; opacity: 1; }
+    }
+
+    /* Respect users who explicitly want reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .aurora .blob, .float-y, .live-dot, .brand-word, .glass-nav::before,
+        .work-item-reveal .gradient-ring, .stat-num, .typing-caret, .brand-caret {
+            animation: none !important;
+        }
+    }
 </style>
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container intro-locked">
@@ -1266,46 +1330,61 @@
     }, total + 250);
   })();
 
-  // Audio Feedback
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  function playClickSound() {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-  }
-  document.querySelectorAll('.interactive-audio, button, a, [type="submit"], .group').forEach(el => {
-    ['click','touchstart'].forEach(evt => {
-      el.addEventListener(evt, (e) => {
-        if (evt === 'touchstart') playClickSound();
-        else if (evt === 'click' && e.pointerType !== 'touch') playClickSound();
+  // Audio Feedback — desktop only (audio context creation on every touch
+  // costs ~5ms main thread on mobile, kills scroll smoothness)
+  const _isCoarsePtr = window.matchMedia('(pointer: coarse)').matches;
+  if (!_isCoarsePtr) {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const playClickSound = () => {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+    };
+    document.querySelectorAll('.interactive-audio, button, a, [type="submit"], .group').forEach(el => {
+      el.addEventListener('click', (e) => {
+        if (e.pointerType !== 'touch') playClickSound();
       }, { passive: true });
     });
-  });
+  }
 
-  // Header scroll
+  // Header scroll — gentler on mobile (no transform tween thrash)
   ScrollTrigger.create({
     start: 'top -50',
     onUpdate: (self) => {
       const header = document.getElementById('top-app-bar');
-      if (self.direction === 1) gsap.to(header, { yPercent: -100, duration: 0.3 });
-      else gsap.to(header, { yPercent: 0, duration: 0.3, ease: "power2.out" });
+      if (_isCoarsePtr) {
+        header.style.transform = self.direction === 1 ? 'translateY(-100%)' : 'translateY(0)';
+        header.style.transition = 'transform 0.3s ease';
+      } else {
+        if (self.direction === 1) gsap.to(header, { yPercent: -100, duration: 0.3 });
+        else gsap.to(header, { yPercent: 0, duration: 0.3, ease: "power2.out" });
+      }
     }
   });
 
-  // Works reveal
-  gsap.timeline({
-    scrollTrigger: { trigger: "#works", start: "top 70%", toggleActions: "play none none none" }
-  }).fromTo(".work-item-reveal",
-    { opacity: 0, y: 100, scale: 0.8, rotationX: -15, rotationY: 10 },
-    { opacity: 1, y: 0, scale: 1, rotationX: 0, rotationY: 0, duration: 1.2, stagger: 0.15, ease: "elastic.out(1, 0.75)", clearProps: "transform" }
-  );
+  // Works reveal — simpler/cheaper on mobile (no 3D rotations)
+  if (_isCoarsePtr) {
+    gsap.timeline({
+      scrollTrigger: { trigger: "#works", start: "top 80%", toggleActions: "play none none none" }
+    }).fromTo(".work-item-reveal",
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: "power2.out", clearProps: "transform" }
+    );
+  } else {
+    gsap.timeline({
+      scrollTrigger: { trigger: "#works", start: "top 70%", toggleActions: "play none none none" }
+    }).fromTo(".work-item-reveal",
+      { opacity: 0, y: 100, scale: 0.8, rotationX: -15, rotationY: 10 },
+      { opacity: 1, y: 0, scale: 1, rotationX: 0, rotationY: 0, duration: 1.2, stagger: 0.15, ease: "elastic.out(1, 0.75)", clearProps: "transform" }
+    );
+  }
 
   // Nav active state
   const sections = document.querySelectorAll('section');
@@ -1328,11 +1407,14 @@
     }
   };
 
-  // Card hover
-  document.querySelectorAll('.group').forEach(card => {
-    card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.01, duration: 0.3, ease: "power2.out" }));
-    card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(2)" }));
-  });
+  // Card hover — desktop only (mouseenter/leave do nothing on touch but
+  // the listeners still cost; skip entirely on mobile)
+  if (!_isCoarsePtr) {
+    document.querySelectorAll('.group').forEach(card => {
+      card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.01, duration: 0.3, ease: "power2.out" }));
+      card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(2)" }));
+    });
+  }
 
   // ─── Liquid Glass Scrollbar ───────────────────────────────────────────────
   const lgBar   = document.getElementById('liquid-scrollbar');
@@ -1359,7 +1441,8 @@
     const railH    = lgBar.clientHeight;
     const thumbH   = lgThumb.offsetHeight;
     const y        = progress * (railH - thumbH);
-    gsap.to(lgThumb, { y, duration: 0.4, ease: "power3.out", overwrite: "auto" });
+    // Direct CSS transform — way cheaper than gsap.to per scroll frame
+    lgThumb.style.transform = 'translate3d(0,' + y + 'px,0)';
 
     let current = 'hero';
     document.querySelectorAll('section').forEach(s => {
@@ -1367,9 +1450,14 @@
     });
     const meta = sectionMeta[current] || sectionMeta.hero;
     if (lgIcon.textContent !== meta.icon) {
-      gsap.fromTo(lgThumb, { scale: 0.7, rotationZ: -25 }, { scale: 1, rotationZ: 0, duration: 0.7, ease: "elastic.out(1.2, 0.5)" });
-      gsap.to(lgThumb, { borderRadius: meta.radius, duration: 0.55, ease: "back.out(1.6)" });
-      gsap.fromTo(lgIcon, { rotationY: 0, scale: 0.4 }, { rotationY: 360, scale: 1, duration: 0.7, ease: "back.out(1.7)" });
+      // Skip the heavy elastic icon flip on mobile
+      if (!_isCoarsePtr) {
+        gsap.fromTo(lgThumb, { scale: 0.7, rotationZ: -25 }, { scale: 1, rotationZ: 0, duration: 0.7, ease: "elastic.out(1.2, 0.5)" });
+        gsap.to(lgThumb, { borderRadius: meta.radius, duration: 0.55, ease: "back.out(1.6)" });
+        gsap.fromTo(lgIcon, { rotationY: 0, scale: 0.4 }, { rotationY: 360, scale: 1, duration: 0.7, ease: "back.out(1.7)" });
+      } else {
+        lgThumb.style.borderRadius = meta.radius;
+      }
       lgIcon.textContent = meta.icon;
     }
     showBar();
@@ -1417,7 +1505,9 @@
   const progBar = document.getElementById('scroll-progress');
   const updateProgress = () => {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
-    gsap.to(progBar, { width: (docH > 0 ? (window.scrollY / docH) * 100 : 0) + '%', duration: 0.25, ease: "power2.out", overwrite: 'auto' });
+    const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+    // Direct CSS, no gsap tween — saves ~1ms per scroll frame on mobile
+    progBar.style.width = pct + '%';
   };
   updateProgress();
 
@@ -1516,8 +1606,17 @@
       if (++frame > total) { el.textContent = original; clearInterval(interval); }
     }, 35);
   }
+  // Scramble text — skip on mobile, the setInterval repaints large headlines
+  // 18 times in 600ms which janks scroll. Just fade in instead.
   document.querySelectorAll('section h2, section h1').forEach(h => {
-    ScrollTrigger.create({ trigger: h, start: "top 85%", once: true, onEnter: () => scrambleText(h) });
+    if (_isCoarsePtr) {
+      gsap.fromTo(h, { opacity: 0, y: 20 }, {
+        opacity: 1, y: 0, duration: 0.55, ease: "power2.out",
+        scrollTrigger: { trigger: h, start: "top 88%", once: true }
+      });
+    } else {
+      ScrollTrigger.create({ trigger: h, start: "top 85%", once: true, onEnter: () => scrambleText(h) });
+    }
   });
 
   // ─── Hero Typing Tagline ───────────────────────────────────────────────────
@@ -1587,62 +1686,9 @@
     }, { passive: true });
   }
 
-  // ─── MOBILE: Device Orientation Tilt for Work Cards ───────────────────────
-  if (isCoarse && window.DeviceOrientationEvent) {
-    const tiltCards = [];
-    document.querySelectorAll('.work-item-reveal').forEach(wrap => {
-      const card = wrap.querySelector('a > div');
-      if (!card) return;
-      wrap.style.perspective = '1200px';
-      card.style.transformStyle = 'preserve-3d';
-      card.style.willChange = 'transform';
-      tiltCards.push(card);
-    });
-
-    // Hero terminal too
-    const heroTerm = document.querySelector('#hero .float-y');
-    if (heroTerm) {
-      heroTerm.style.transformStyle = 'preserve-3d';
-      heroTerm.style.willChange = 'transform';
-      tiltCards.push(heroTerm);
-    }
-
-    let baseBeta = null, baseGamma = null;
-    const handleTilt = (e) => {
-      if (e.beta == null || e.gamma == null) return;
-      if (baseBeta == null)  baseBeta  = e.beta;
-      if (baseGamma == null) baseGamma = e.gamma;
-      const dx = Math.max(-15, Math.min(15, e.gamma - baseGamma));
-      const dy = Math.max(-15, Math.min(15, e.beta  - baseBeta));
-      tiltCards.forEach(card => {
-        // Only tilt cards in viewport for perf
-        const r = card.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
-        gsap.to(card, {
-          rotationX: -dy * 0.35,
-          rotationY:  dx * 0.45,
-          duration: 0.6, ease: "power3.out",
-          transformPerspective: 1200,
-          overwrite: 'auto'
-        });
-      });
-    };
-
-    const startTilt = () => window.addEventListener('deviceorientation', handleTilt, { passive: true });
-
-    // iOS 13+ requires permission
-    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-      const askOnce = () => {
-        DeviceOrientationEvent.requestPermission().then(state => {
-          if (state === 'granted') startTilt();
-        }).catch(() => {});
-        document.removeEventListener('touchend', askOnce);
-      };
-      document.addEventListener('touchend', askOnce, { once: true });
-    } else {
-      startTilt();
-    }
-  }
+  // ─── MOBILE: Device Orientation Tilt — DISABLED for scroll smoothness.
+  // Keeping the touch ripple (one-shot on tap) but tilt fires 60×/sec during
+  // any hand motion which fights with native scroll. Re-enable here if wanted.
 
   // ─── MOBILE: Smooth momentum touch-magnetic on primary CTAs ──────────────
   if (isCoarse) {
