@@ -2,7 +2,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>PORTFOLIO_OS | Abdul Aleem Arshad</title>
+<title>abdul_portofolio | Abdul Aleem Arshad</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -353,9 +353,288 @@
         transform: translate(-2px, -2px);
         box-shadow: 5px 5px 0 0 #1a1c19;
     }
+
+    /* ─────────────────────────────────────────────────────────────
+       LIVE / GLASSMORPHISM / ANIMATION UPGRADES
+       ───────────────────────────────────────────────────────────── */
+
+    /* Aurora blob background */
+    .aurora {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+    }
+    .aurora .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(90px);
+        opacity: 0.55;
+        mix-blend-mode: multiply;
+        will-change: transform;
+    }
+    .aurora .b1 { width: 520px; height: 520px; background: #ccff00; top: -120px; left: -140px; animation: floatA 18s ease-in-out infinite; }
+    .aurora .b2 { width: 460px; height: 460px; background: #abd600; top: 30%;  right: -160px; animation: floatB 22s ease-in-out infinite; }
+    .aurora .b3 { width: 380px; height: 380px; background: #c3f400; bottom: -120px; left: 20%; animation: floatC 26s ease-in-out infinite; }
+    .aurora .b4 { width: 300px; height: 300px; background: #e3ff7a; top: 55%;  left: 45%; animation: floatA 30s ease-in-out infinite reverse; opacity: 0.35; }
+    @keyframes floatA { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(80px,60px) scale(1.15); } }
+    @keyframes floatB { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-90px,40px) scale(1.2); } }
+    @keyframes floatC { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(60px,-70px) scale(1.1); } }
+
+    /* Glass navbar */
+    .glass-nav {
+        background: rgba(250, 250, 245, 0.55);
+        backdrop-filter: blur(22px) saturate(180%);
+        -webkit-backdrop-filter: blur(22px) saturate(180%);
+        border-bottom: 2px solid #1a1c19;
+        box-shadow: 6px 6px 0 0 rgba(26,28,25,1), inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+    .glass-nav::before {
+        content:"";
+        position:absolute; inset:0;
+        background: linear-gradient(120deg, rgba(204,255,0,0.0) 30%, rgba(204,255,0,0.25) 50%, rgba(204,255,0,0) 70%);
+        background-size: 200% 100%;
+        animation: navShine 8s linear infinite;
+        pointer-events:none;
+    }
+    @keyframes navShine { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
+
+    /* Logo word + blinking caret */
+    .brand-word {
+        background: linear-gradient(120deg, #1a1c19 0%, #506600 45%, #abd600 60%, #1a1c19 75%);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: brandShine 6s linear infinite;
+    }
+    @keyframes brandShine { 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+    .brand-caret {
+        display:inline-block;
+        width: 10px; height: 22px;
+        background: #506600;
+        margin-left: 4px;
+        transform: translateY(3px);
+        animation: blink 1s steps(2,start) infinite;
+    }
+    @keyframes blink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+
+    /* Live status pill */
+    .live-pill {
+        display:inline-flex; align-items:center; gap:8px;
+        padding: 4px 12px;
+        border: 1.5px solid #1a1c19;
+        border-radius: 999px;
+        background: rgba(204,255,0,0.25);
+        backdrop-filter: blur(10px);
+        font-family:'JetBrains Mono', monospace;
+        font-size: 10px; font-weight: 700; letter-spacing: .15em;
+        text-transform: uppercase;
+        color:#161e00;
+    }
+    .live-dot {
+        width: 8px; height: 8px; border-radius: 999px;
+        background:#22c55e;
+        box-shadow: 0 0 0 0 rgba(34,197,94,0.7);
+        animation: pulseDot 1.6s ease-out infinite;
+    }
+    @keyframes pulseDot {
+        0%   { box-shadow: 0 0 0 0   rgba(34,197,94,0.7); }
+        70%  { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
+        100% { box-shadow: 0 0 0 0   rgba(34,197,94,0); }
+    }
+
+    /* Nav link hover underline grow */
+    .nav-link { position: relative; }
+    .nav-link::after {
+        content:"";
+        position:absolute; left:0; bottom:-6px;
+        width:100%; height:3px;
+        background:#506600;
+        transform: scaleX(0); transform-origin:right;
+        transition: transform .35s cubic-bezier(.7,0,.3,1);
+    }
+    .nav-link:hover::after { transform: scaleX(1); transform-origin:left; }
+
+    /* Hamburger button */
+    .hamburger {
+        width: 44px; height: 44px;
+        display:flex; flex-direction:column; justify-content:center; align-items:center;
+        gap:5px;
+        border:2px solid #1a1c19;
+        background: rgba(255,255,255,0.4);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        box-shadow: 3px 3px 0 0 #1a1c19;
+        cursor: pointer;
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .hamburger:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 0 #1a1c19; }
+    .hamburger span {
+        display:block; width:22px; height:2.5px; background:#1a1c19; border-radius:2px;
+        transition: transform .3s ease, opacity .2s ease;
+    }
+    .hamburger.is-open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .hamburger.is-open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+    /* Mobile drawer */
+    #mobile-drawer {
+        position: fixed;
+        top: 0; right: 0;
+        height: 100vh;
+        width: min(80vw, 340px);
+        z-index: 60;
+        background: rgba(250,250,245,0.75);
+        backdrop-filter: blur(28px) saturate(180%);
+        -webkit-backdrop-filter: blur(28px) saturate(180%);
+        border-left: 2px solid #1a1c19;
+        box-shadow: -10px 0 40px rgba(0,0,0,0.12);
+        transform: translateX(105%);
+        transition: transform .45s cubic-bezier(.7,0,.2,1);
+        display:flex; flex-direction:column;
+        padding: 96px 28px 28px;
+        gap: 4px;
+    }
+    #mobile-drawer.is-open { transform: translateX(0); }
+    #mobile-drawer a {
+        display:flex; align-items:center; justify-content:space-between;
+        padding: 16px 12px;
+        border-bottom: 1.5px solid rgba(26,28,25,0.15);
+        font-family:'Space Grotesk', sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        color:#1a1c19;
+        opacity: 0; transform: translateX(20px);
+        transition: color .2s ease, transform .3s ease;
+    }
+    #mobile-drawer.is-open a { opacity: 1; transform: translateX(0); }
+    #mobile-drawer.is-open a:nth-child(1) { transition-delay: .12s; }
+    #mobile-drawer.is-open a:nth-child(2) { transition-delay: .18s; }
+    #mobile-drawer.is-open a:nth-child(3) { transition-delay: .24s; }
+    #mobile-drawer.is-open a:nth-child(4) { transition-delay: .30s; }
+    #mobile-drawer.is-open a:nth-child(5) { transition-delay: .36s; }
+    #mobile-drawer a:hover { color: #506600; }
+    #mobile-drawer .drawer-foot {
+        margin-top: auto;
+        padding-top: 18px;
+        border-top: 2px solid #1a1c19;
+        font-family:'JetBrains Mono', monospace;
+        font-size: 10px; letter-spacing:.18em; text-transform:uppercase;
+        color:#444933;
+        display:flex; justify-content:space-between; align-items:center;
+    }
+    #drawer-backdrop {
+        position: fixed; inset: 0;
+        background: rgba(26,28,25,0.35);
+        backdrop-filter: blur(4px);
+        z-index: 55;
+        opacity: 0; pointer-events: none;
+        transition: opacity .35s ease;
+    }
+    #drawer-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+    /* Marquee */
+    .marquee {
+        position: relative;
+        overflow: hidden;
+        background: #1a1c19;
+        color:#fafaf5;
+        border-top: 2px solid #1a1c19;
+        border-bottom: 2px solid #1a1c19;
+    }
+    .marquee-track {
+        display: inline-flex;
+        gap: 48px;
+        padding: 14px 0;
+        white-space: nowrap;
+        animation: marquee 28s linear infinite;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: .25em;
+        text-transform: uppercase;
+    }
+    .marquee-track span { display:inline-flex; align-items:center; gap: 12px; }
+    .marquee-track .dot { color: #ccff00; font-size: 18px; }
+    @keyframes marquee {
+        0%   { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+
+    /* Typing caret on hero subline */
+    .typing-caret {
+        display:inline-block;
+        width: 3px; height: 1em;
+        background: currentColor;
+        margin-left: 4px;
+        transform: translateY(2px);
+        animation: blink 0.9s steps(2,start) infinite;
+    }
+
+    /* Floating animation for hero terminal frame */
+    .float-y { animation: floatY 6s ease-in-out infinite; }
+    @keyframes floatY {
+        0%,100% { transform: translateY(0); }
+        50%     { transform: translateY(-10px); }
+    }
+
+    /* Glass card v2 (deeper) */
+    .glass-card-v2 {
+        background: rgba(255,255,255,0.35);
+        backdrop-filter: blur(22px) saturate(180%);
+        -webkit-backdrop-filter: blur(22px) saturate(180%);
+        border: 2px solid #1a1c19;
+        box-shadow: 0 8px 32px rgba(26,28,25,0.12), inset 0 1px 0 rgba(255,255,255,0.6), 6px 6px 0 0 rgba(26,28,25,1);
+    }
+
+    /* Animated stat counter pulse */
+    .stat-num {
+        background: linear-gradient(120deg, #506600, #abd600, #506600);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: brandShine 4s linear infinite;
+    }
+
+    /* Gradient ring on hover for project cards */
+    .work-item-reveal .gradient-ring {
+        position:absolute; inset:-2px;
+        border-radius: inherit;
+        padding: 2px;
+        background: conic-gradient(from var(--ang, 0deg), #ccff00, #506600, #ccff00, #abd600, #ccff00);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+                mask-composite: exclude;
+        opacity: 0;
+        transition: opacity .4s ease;
+        pointer-events: none;
+        animation: spinRing 6s linear infinite;
+    }
+    @keyframes spinRing { to { --ang: 360deg; } }
+    .work-item-reveal:hover .gradient-ring { opacity: 0.9; }
+    @property --ang { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
+    @media (max-width: 768px) {
+        .marquee-track { font-size: 11px; gap: 32px; }
+    }
 </style>
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- ─── Aurora Animated Background ─── -->
+<div class="aurora" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="blob b4"></div>
+</div>
 
 <!-- Global Noise Overlay -->
 <div class="fixed inset-0 z-[100] noise-overlay"></div>
@@ -390,27 +669,54 @@
 </svg>
 
 <!-- Top Navigation -->
-<header class="fixed top-0 w-full z-50 border-b-2 border-on-background bg-surface/80 backdrop-blur-xl shadow-[6px_6px_0px_0px_rgba(26,28,25,1)] flex justify-between items-center px-gutter py-4 max-w-full mx-auto" id="top-app-bar">
-  <div class="flex items-center gap-3">
-    <span class="material-symbols-outlined text-primary" style="font-size:32px;">terminal</span>
-    <span class="font-display text-headline-md tracking-tighter text-on-background uppercase">PORTFOLIO_OS</span>
-  </div>
-  <nav class="hidden md:flex items-center gap-10">
-    <a class="nav-link font-label-caps text-label-caps text-primary underline decoration-4 underline-offset-8 interactive-audio" href="#hero">HOME</a>
+<header class="glass-nav fixed top-0 w-full z-50 flex justify-between items-center px-gutter py-3 max-w-full mx-auto" id="top-app-bar">
+  <a href="#hero" class="flex items-center gap-3 group relative z-10">
+    <span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform duration-500" style="font-size:30px;">terminal</span>
+    <span class="font-display text-[22px] md:text-[26px] tracking-tighter brand-word lowercase font-extrabold">abdul_portofolio</span>
+    <span class="brand-caret"></span>
+  </a>
+
+  <nav class="hidden md:flex items-center gap-9 relative z-10">
+    <a class="nav-link font-label-caps text-label-caps text-primary interactive-audio" href="#hero">HOME</a>
     <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#about">ABOUT</a>
     <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#works">WORKS</a>
     <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#contact">CONTACT</a>
+    <span class="live-pill">
+      <span class="live-dot"></span>
+      <span>Available</span>
+    </span>
   </nav>
-  <button class="material-symbols-outlined text-on-surface p-2 hover:bg-surface-container-high transition-colors rounded-full interactive-audio">menu</button>
+
+  <button id="hamburger-btn" class="hamburger md:hidden relative z-10" aria-label="Open navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </header>
+
+<!-- Mobile Drawer -->
+<div id="drawer-backdrop" aria-hidden="true"></div>
+<aside id="mobile-drawer" aria-hidden="true">
+  <a href="#hero" data-drawer-link>Home <span class="material-symbols-outlined">arrow_outward</span></a>
+  <a href="#about" data-drawer-link>About <span class="material-symbols-outlined">arrow_outward</span></a>
+  <a href="#works" data-drawer-link>Works <span class="material-symbols-outlined">arrow_outward</span></a>
+  <a href="#contact" data-drawer-link>Contact <span class="material-symbols-outlined">arrow_outward</span></a>
+  <a href="https://github.com/abdulaleemarshad1979" target="_blank" data-drawer-link>GitHub <span class="material-symbols-outlined">north_east</span></a>
+  <div class="drawer-foot">
+    <span>v3.0.0</span>
+    <span class="live-pill"><span class="live-dot"></span><span>Online</span></span>
+  </div>
+</aside>
 
 <main class="w-full">
 
 <!-- ─── HERO ─── -->
-<section class="min-h-screen pt-24 flex flex-col md:flex-row border-b-2 border-on-background" id="hero">
-  <div class="flex-1 p-gutter flex flex-col justify-center items-start gap-8">
-    <div class="space-y-2">
-      <span class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 uppercase">AI/LLM Engineer · Full-Stack Builder · HackRx 6.0 Finalist</span>
+<section class="min-h-screen pt-24 flex flex-col md:flex-row border-b-2 border-on-background relative overflow-hidden" id="hero">
+  <div class="flex-1 p-gutter flex flex-col justify-center items-start gap-8 relative z-10">
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="live-pill"><span class="live-dot"></span><span>Now coding · India</span></span>
+      <span class="font-label-caps text-label-caps text-on-surface-variant">[ v3.0.0 ]</span>
+    </div>
+    <div class="space-y-3">
+      <span id="hero-tagline" class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 uppercase inline-block min-h-[1em]"></span>
       <h1 class="font-display text-[80px] leading-tight md:text-[100px] font-extrabold tracking-tighter text-on-background uppercase">Hi, I'm<br/><span class="text-primary italic">Abdul!</span></h1>
     </div>
     <p class="font-body-lg text-body-lg max-w-md text-on-surface-variant">
@@ -425,9 +731,9 @@
       </a>
     </div>
   </div>
-  <div class="flex-1 relative vertical-line bg-surface-container-low min-h-[500px]">
+  <div class="flex-1 relative vertical-line bg-surface-container-low/40 min-h-[500px]">
     <div class="absolute inset-0 flex items-center justify-center p-gutter">
-      <div class="relative w-full h-full border-2 border-on-background shadow-[12px_12px_0px_0px_#ccff00] flex flex-col items-center justify-center bg-surface-container gap-6 p-8">
+      <div class="relative w-full h-full border-2 border-on-background shadow-[12px_12px_0px_0px_#ccff00] flex flex-col items-center justify-center bg-surface-container/80 backdrop-blur-md gap-6 p-8 float-y">
         <!-- Terminal-style avatar block -->
         <div class="w-full max-w-xs border-2 border-on-background bg-on-background text-surface p-6 font-label-caps text-label-caps shadow-[6px_6px_0px_0px_#ccff00]">
           <div class="text-primary mb-4">$ whoami</div>
@@ -445,6 +751,24 @@
     </div>
   </div>
 </section>
+
+<!-- ─── Marquee Ticker ─── -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>BUILDING AI SYSTEMS <span class="dot">●</span></span>
+    <span>HACKRX 6.0 FINALIST <span class="dot">●</span></span>
+    <span>30M+ USERS SERVED <span class="dot">●</span></span>
+    <span>FASTAPI · REACT · GROQ · YOLOV8 <span class="dot">●</span></span>
+    <span>OPEN TO INTERNSHIPS <span class="dot">●</span></span>
+    <span>SHIPPING EVERY WEEK <span class="dot">●</span></span>
+    <span>BUILDING AI SYSTEMS <span class="dot">●</span></span>
+    <span>HACKRX 6.0 FINALIST <span class="dot">●</span></span>
+    <span>30M+ USERS SERVED <span class="dot">●</span></span>
+    <span>FASTAPI · REACT · GROQ · YOLOV8 <span class="dot">●</span></span>
+    <span>OPEN TO INTERNSHIPS <span class="dot">●</span></span>
+    <span>SHIPPING EVERY WEEK <span class="dot">●</span></span>
+  </div>
+</div>
 
 <!-- ─── ABOUT ─── -->
 <section class="min-h-screen border-b-2 border-on-background flex flex-col md:flex-row bg-surface-container" id="about">
@@ -493,14 +817,14 @@
       <p class="font-body-lg text-body-lg text-on-surface-variant">
         I believe in building things that solve real problems at real scale. My work blends AI/LLM reasoning with production-grade backend engineering — always shipping, always iterating.
       </p>
-      <div class="p-6 bg-surface border-2 border-on-background shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]">
+      <div class="p-6 glass-card-v2">
         <span class="material-symbols-outlined text-primary mb-4" style="font-size:48px;">psychology</span>
         <h4 class="font-label-caps text-label-caps mb-2">AI-FIRST THINKING</h4>
         <p class="font-body-md text-body-md">Every project starts with: can AI make this smarter? RAG, vector search, LLM APIs — wired into real backends.</p>
       </div>
     </div>
     <div class="flex flex-col justify-end gap-6">
-      <div class="p-6 glass-card border-2 border-on-background shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]">
+      <div class="p-6 glass-card-v2">
         <span class="material-symbols-outlined text-primary mb-4" style="font-size:48px;">hub</span>
         <h4 class="font-label-caps text-label-caps mb-2">FULL-STACK DEPTH</h4>
         <p class="font-body-md text-body-md">FastAPI · Flask · Node.js · React · PostgreSQL · Redis · WebSocket · Docker. From DB to UI in one repo.</p>
@@ -684,19 +1008,19 @@
       </div>
     </div>
   </div>
-  <div class="flex-1 p-gutter bg-surface flex items-center justify-center vertical-line">
-    <form class="w-full max-w-md space-y-6">
+  <div class="flex-1 p-gutter bg-surface/40 backdrop-blur-md flex items-center justify-center vertical-line">
+    <form class="w-full max-w-md space-y-6 glass-card-v2 p-8">
       <div class="space-y-2">
         <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Name</label>
-        <input class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Your Name" type="text"/>
+        <input class="w-full bg-white/40 backdrop-blur border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Your Name" type="text"/>
       </div>
       <div class="space-y-2">
         <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Email</label>
-        <input class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="you@example.com" type="email"/>
+        <input class="w-full bg-white/40 backdrop-blur border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="you@example.com" type="email"/>
       </div>
       <div class="space-y-2">
         <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Message</label>
-        <textarea class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Tell me about your project or opportunity..." rows="4"></textarea>
+        <textarea class="w-full bg-white/40 backdrop-blur border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Tell me about your project or opportunity..." rows="4"></textarea>
       </div>
       <button class="w-full brushed-aluminum cyber-accent p-6 font-label-caps text-label-caps uppercase transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[10px_10px_0px_0px_rgba(26,28,25,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none interactive-audio" type="submit">
         <span>Send Transmission</span>
@@ -1098,6 +1422,105 @@
       once: true,
       onEnter: () => scrambleText(h)
     });
+  });
+
+  // ─── Hero Typing Tagline ───────────────────────────────────────────────
+  (() => {
+    const el = document.getElementById('hero-tagline');
+    if (!el) return;
+    const phrases = [
+      'AI/LLM Engineer',
+      'Full-Stack Builder',
+      'HackRx 6.0 Finalist',
+      'Crowd-Safety @ 30M+ Scale',
+      'Chrome Extension Hacker',
+      'Production Shipper'
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const tick = () => {
+      const word = phrases[pi];
+      if (!deleting) {
+        ci++;
+        el.innerHTML = word.slice(0, ci) + '<span class="typing-caret"></span>';
+        if (ci === word.length) { deleting = true; setTimeout(tick, 1400); return; }
+      } else {
+        ci--;
+        el.innerHTML = word.slice(0, ci) + '<span class="typing-caret"></span>';
+        if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(tick, deleting ? 35 : 70);
+    };
+    tick();
+  })();
+
+  // ─── Mobile Drawer Toggle ──────────────────────────────────────────────
+  (() => {
+    const btn      = document.getElementById('hamburger-btn');
+    const drawer   = document.getElementById('mobile-drawer');
+    const backdrop = document.getElementById('drawer-backdrop');
+    if (!btn || !drawer || !backdrop) return;
+
+    const open = () => {
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      backdrop.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => {
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      backdrop.classList.remove('is-open');
+      document.body.style.overflow = '';
+    };
+    btn.addEventListener('click', () => {
+      drawer.classList.contains('is-open') ? close() : open();
+    });
+    backdrop.addEventListener('click', close);
+    document.querySelectorAll('[data-drawer-link]').forEach(a => {
+      a.addEventListener('click', () => setTimeout(close, 80));
+    });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    // Auto-close on resize to desktop
+    window.addEventListener('resize', () => { if (window.innerWidth >= 768) close(); });
+  })();
+
+  // ─── Aurora blobs scroll-driven parallax (works on every device) ───────
+  (() => {
+    const blobs = document.querySelectorAll('.aurora .blob');
+    if (!blobs.length) return;
+    const update = () => {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const p = docH > 0 ? window.scrollY / docH : 0; // 0 → 1
+      blobs.forEach((b, i) => {
+        const depth = (i + 1) * 60;
+        const dir   = i % 2 === 0 ? 1 : -1;
+        const x = Math.sin(p * Math.PI * 2 + i) * depth * dir;
+        const y = p * depth * dir * 1.2;
+        const s = 1 + Math.sin(p * Math.PI * 2 + i) * 0.08;
+        gsap.to(b, { x, y, scale: s, duration: 0.8, ease: "power2.out", overwrite: 'auto' });
+      });
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  // ─── Skill / cert tag stagger reveal on scroll ─────────────────────────
+  gsap.utils.toArray('#about .skill-tag, #about .cert-badge').forEach((tag, i) => {
+    gsap.fromTo(tag,
+      { opacity: 0, y: 20, scale: 0.85 },
+      {
+        opacity: 1, y: 0, scale: 1,
+        duration: 0.5,
+        ease: "back.out(2)",
+        delay: (i % 12) * 0.04,
+        scrollTrigger: { trigger: tag, start: "top 92%", once: true }
+      }
+    );
   });
 
 </script>
