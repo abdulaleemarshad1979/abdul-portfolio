@@ -624,9 +624,124 @@
     @media (max-width: 768px) {
         .marquee-track { font-size: 11px; gap: 32px; }
     }
+
+    /* ─── Apple-style Hello Intro Overlay ─── */
+    #intro-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #1a1c19;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        will-change: transform;
+    }
+    #intro-overlay::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 30%, rgba(204,255,0,0.10), transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(171,214,0,0.08), transparent 50%);
+        pointer-events: none;
+    }
+    #intro-overlay.is-leaving {
+        animation: introWipe 1s cubic-bezier(.7,0,.2,1) forwards;
+    }
+    @keyframes introWipe {
+        0%   { transform: translateY(0); }
+        100% { transform: translateY(-105%); }
+    }
+    #intro-word {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: clamp(64px, 14vw, 220px);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: #fafaf5;
+        text-align: center;
+        white-space: nowrap;
+        position: relative;
+        z-index: 2;
+        will-change: transform, opacity, filter;
+    }
+    #intro-word::after {
+        content: ".";
+        color: #ccff00;
+        margin-left: 0.05em;
+        display: inline-block;
+        animation: introDot 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes introDot {
+        0% { transform: translateY(0); opacity: 0.4; }
+        100% { transform: translateY(-10%); opacity: 1; }
+    }
+    #intro-progress {
+        position: absolute;
+        bottom: 32px; left: 50%;
+        transform: translateX(-50%);
+        display: flex; align-items: center; gap: 10px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        letter-spacing: 0.25em;
+        color: rgba(250,250,245,0.55);
+        text-transform: uppercase;
+        z-index: 2;
+    }
+    #intro-progress .bar {
+        width: 120px; height: 2px;
+        background: rgba(250,250,245,0.18);
+        position: relative;
+        overflow: hidden;
+    }
+    #intro-progress .bar::after {
+        content: "";
+        position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+        background: linear-gradient(90deg, #ccff00, #abd600);
+        animation: introBar 2.4s cubic-bezier(.7,0,.2,1) forwards;
+    }
+    @keyframes introBar { to { width: 100%; } }
+
+    /* Lock body scroll while intro plays */
+    body.intro-locked { overflow: hidden; }
+
+    /* Site content fade-up after intro */
+    body.intro-locked main,
+    body.intro-locked header,
+    body.intro-locked .marquee,
+    body.intro-locked footer,
+    body.intro-locked .aurora {
+        opacity: 0;
+    }
+    body.intro-done main,
+    body.intro-done header,
+    body.intro-done .marquee,
+    body.intro-done footer,
+    body.intro-done .aurora {
+        animation: siteRise 1s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    @keyframes siteRise {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        #intro-overlay { display: none !important; }
+    }
 </style>
 </head>
-<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container intro-locked">
+
+<!-- ─── Apple-style "Hello" Intro Overlay ─── -->
+<div id="intro-overlay" aria-hidden="false" role="status" aria-label="Loading">
+  <div id="intro-word">Hello</div>
+  <div id="intro-progress">
+    <span>Loading</span>
+    <span class="bar"></span>
+    <span id="intro-pct">0%</span>
+  </div>
+</div>
 
 <!-- ─── Aurora Animated Background ─── -->
 <div class="aurora" aria-hidden="true">
@@ -1063,6 +1178,96 @@
 
 <script>
   gsap.registerPlugin(ScrollTrigger);
+
+  // ─── Apple-style "Hello" Intro (multi-language preloader) ───────────────
+  (() => {
+    const overlay = document.getElementById('intro-overlay');
+    const word    = document.getElementById('intro-word');
+    const pct     = document.getElementById('intro-pct');
+    if (!overlay || !word) return;
+
+    // Skip on reduced motion or if user has already seen it this session
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      overlay.remove();
+      document.body.classList.remove('intro-locked');
+      document.body.classList.add('intro-done');
+      return;
+    }
+
+    const greetings = [
+      'Hello',     // English
+      'नमस्ते',     // Hindi
+      'السلام',    // Urdu / Arabic
+      'Hola',      // Spanish
+      'Bonjour',   // French
+      'こんにちは',   // Japanese
+      '你好',       // Chinese
+      'Hallo',     // German
+      'Olá',       // Portuguese
+      'Hello'      // back to English to settle
+    ];
+    const total = 2400; // total intro duration ms (matches CSS bar)
+    const step  = Math.floor(total / greetings.length);
+    let i = 0;
+
+    // Initial pop-in
+    word.style.transform = 'translateY(20px) scale(0.92)';
+    word.style.opacity   = '0';
+    word.style.filter    = 'blur(8px)';
+    requestAnimationFrame(() => {
+      word.style.transition = 'transform .55s cubic-bezier(.2,.8,.2,1), opacity .55s ease, filter .55s ease';
+      word.style.transform = 'translateY(0) scale(1)';
+      word.style.opacity   = '1';
+      word.style.filter    = 'blur(0)';
+    });
+
+    // Cycle greetings
+    const startCycle = () => {
+      const swap = () => {
+        i++;
+        if (i >= greetings.length) return;
+        word.style.transition = 'transform .25s ease, opacity .2s ease, filter .25s ease';
+        word.style.transform = 'translateY(-12px) scale(0.96)';
+        word.style.opacity   = '0';
+        word.style.filter    = 'blur(6px)';
+        setTimeout(() => {
+          word.textContent = greetings[i];
+          word.style.transform = 'translateY(12px) scale(0.96)';
+          requestAnimationFrame(() => {
+            word.style.transform = 'translateY(0) scale(1)';
+            word.style.opacity   = '1';
+            word.style.filter    = 'blur(0)';
+          });
+          if (i < greetings.length - 1) setTimeout(swap, step);
+        }, 180);
+      };
+      setTimeout(swap, step);
+    };
+    setTimeout(startCycle, 320);
+
+    // Drive percentage counter
+    const t0 = performance.now();
+    const tickPct = () => {
+      const dt = performance.now() - t0;
+      const p = Math.min(100, Math.round((dt / total) * 100));
+      if (pct) pct.textContent = p + '%';
+      if (p < 100) requestAnimationFrame(tickPct);
+    };
+    requestAnimationFrame(tickPct);
+
+    // Wipe away after total duration
+    setTimeout(() => {
+      overlay.classList.add('is-leaving');
+      document.body.classList.remove('intro-locked');
+      document.body.classList.add('intro-done');
+      // Refresh ScrollTriggers after layout settles
+      setTimeout(() => {
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+        overlay.remove();
+      }, 1100);
+    }, total + 250);
+  })();
 
   // Audio Feedback
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
