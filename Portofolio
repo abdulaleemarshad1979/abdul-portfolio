@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PORTFOLIO_OS | Abdul Aleem Arshad</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<!-- Scripts -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+            "on-error-container": "#93000a",
+            "on-surface-variant": "#444933",
+            "tertiary-fixed-dim": "#c6c7c1",
+            "on-background": "#1a1c19",
+            "secondary-fixed-dim": "#c8c6c5",
+            "secondary-fixed": "#e5e2e1",
+            "inverse-primary": "#abd600",
+            "surface-container-low": "#f4f4ef",
+            "on-tertiary-container": "#6a6b66",
+            "primary": "#506600",
+            "outline-variant": "#c4c9ac",
+            "on-surface": "#1a1c19",
+            "primary-container": "#ccff00",
+            "surface": "#fafaf5",
+            "outline": "#747a60",
+            "on-secondary-fixed-variant": "#474746",
+            "surface-container-highest": "#e3e3de",
+            "on-tertiary": "#ffffff",
+            "secondary-container": "#e2dfde",
+            "surface-bright": "#fafaf5",
+            "surface-container-high": "#e8e8e3",
+            "surface-tint": "#506600",
+            "on-primary": "#ffffff",
+            "surface-variant": "#e3e3de",
+            "surface-dim": "#dadad5",
+            "primary-fixed-dim": "#abd600",
+            "surface-container": "#eeeee9",
+            "primary-fixed": "#c3f400",
+            "on-secondary-container": "#636262",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-container": "#edede7",
+            "on-secondary-fixed": "#1c1b1b",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#e3e3dd",
+            "inverse-surface": "#2f312e",
+            "secondary": "#5f5e5e",
+            "on-tertiary-fixed-variant": "#464743",
+            "tertiary": "#5d5f5a",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed": "#1a1c19",
+            "on-primary-fixed": "#161e00",
+            "on-primary-fixed-variant": "#3c4d00",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#f1f1ec",
+            "background": "#fafaf5",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#5b7300"
+        },
+        "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+        },
+        "spacing": {
+            "gutter": "24px",
+            "margin-sm": "16px",
+            "margin-lg": "48px",
+            "unit": "8px",
+            "shadow-offset": "6px",
+            "border-width": "2px"
+        },
+        "fontFamily": {
+            "label-caps": ["JetBrains Mono"],
+            "body-lg": ["JetBrains Mono"],
+            "display": ["Space Grotesk"],
+            "body-md": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "headline-lg-mobile": ["Space Grotesk"]
+        },
+        "fontSize": {
+            "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "display": ["80px", {"lineHeight": "1.0", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "headline-lg": ["48px", {"lineHeight": "1.1", "fontWeight": "700"}],
+            "headline-md": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+            "headline-lg-mobile": ["32px", {"lineHeight": "1.1", "fontWeight": "700"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+    .noise-overlay {
+        background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCT_KJX5PFGW5hSL7zP9GfhIfs8xZxALoaeAr9paqpY8nFJ2q2hlphh_5aVo9o-6vk-2Bc1sQvOF8AbfBz9k7E-PWjDFsOF9Y0mbJPUl7HxjIvbI0a97sbb6N_6s5CtXf3H0vzDN7dGChQcRYwGSgwF56WTvV1Ao65Y6ENPoFis_FffQXRkFZYkZI_PT8O3HZeMFvlZwR_5j4QOIOebR2TKHgappglcnvhjVmp5lDXGerdd0MTkH17aJvrZ_yQVMYGkMxTx1nd9HG0);
+        opacity: 0.04;
+        pointer-events: none
+    }
+    .brushed-aluminum {
+        background: linear-gradient(135deg, #e5e2e1 0%, #c8c6c5 50%, #e5e2e1 100%);
+        box-shadow: inset 1px 1px 0 white, inset -1px -1px 0 #474746, 6px 6px 0 0 rgba(26, 28, 25, 1);
+        position: relative;
+        overflow: hidden;
+        filter: url(#button-ripple);
+    }
+    .brushed-aluminum::after {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.1) 3px);
+        pointer-events: none
+    }
+    .liquid-container { filter: url(#liquid); }
+    .glass-card {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.2);
+        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.1)
+    }
+    .section-divider { border-bottom: 2px solid #1a1c19 }
+    .vertical-line { border-left: 2px solid #1a1c19 }
+    .cyber-accent { background-color: #cf0; color: #161e00 }
+    .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24 }
+    html { scroll-behavior: smooth }
+    body { overflow-x: hidden }
+    .bloom-highlight {
+        background: radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+        mix-blend-mode: overlay;
+        pointer-events: none;
+        opacity: 0;
+    }
+    .brushed-aluminum > * { position: relative; z-index: 1; }
+    .work-item-reveal { opacity: 0; }
+    .skill-tag {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 4px 12px;
+        border: 1px solid #1a1c19;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+        background: #fafaf5;
+        box-shadow: 2px 2px 0 0 #1a1c19;
+        text-transform: uppercase;
+    }
+    .cert-badge {
+        padding: 6px 14px;
+        border: 2px solid #1a1c19;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+        background: #ccff00; color: #161e00;
+        box-shadow: 3px 3px 0 0 #1a1c19;
+        text-transform: uppercase;
+    }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Global Noise Overlay -->
+<div class="fixed inset-0 z-[100] noise-overlay"></div>
+
+<!-- SVG Filters -->
+<svg class="hidden" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs>
+<filter id="liquid">
+  <fegaussianblur in="SourceGraphic" result="blur" stddeviation="8"></fegaussianblur>
+  <fecolormatrix in="blur" mode="matrix" result="liquid" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -10"></fecolormatrix>
+  <fecomposite in="SourceGraphic" in2="liquid" operator="atop"></fecomposite>
+</filter>
+<filter height="140%" id="button-ripple" width="140%" x="-20%" y="-20%">
+  <feturbulence basefrequency="0.01" id="ripple-turb" numoctaves="2" result="turbulence" type="fractalNoise"></feturbulence>
+  <fedisplacementmap id="ripple-displace" in="SourceGraphic" in2="turbulence" scale="0" xchannelselector="R" ychannelselector="G"></fedisplacementmap>
+</filter>
+</defs>
+</svg>
+
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 border-b-2 border-on-background bg-surface/80 backdrop-blur-xl shadow-[6px_6px_0px_0px_rgba(26,28,25,1)] flex justify-between items-center px-gutter py-4 max-w-full mx-auto" id="top-app-bar">
+  <div class="flex items-center gap-3">
+    <span class="material-symbols-outlined text-primary" style="font-size:32px;">terminal</span>
+    <span class="font-display text-headline-md tracking-tighter text-on-background uppercase">PORTFOLIO_OS</span>
+  </div>
+  <nav class="hidden md:flex items-center gap-10">
+    <a class="nav-link font-label-caps text-label-caps text-primary underline decoration-4 underline-offset-8 interactive-audio" href="#hero">HOME</a>
+    <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#about">ABOUT</a>
+    <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#works">WORKS</a>
+    <a class="nav-link font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors interactive-audio" href="#contact">CONTACT</a>
+  </nav>
+  <button class="material-symbols-outlined text-on-surface p-2 hover:bg-surface-container-high transition-colors rounded-full interactive-audio">menu</button>
+</header>
+
+<main class="w-full">
+
+<!-- ─── HERO ─── -->
+<section class="min-h-screen pt-24 flex flex-col md:flex-row border-b-2 border-on-background" id="hero">
+  <div class="flex-1 p-gutter flex flex-col justify-center items-start gap-8">
+    <div class="space-y-2">
+      <span class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1 uppercase">AI/LLM Engineer · Full-Stack Builder · HackRx 6.0 Finalist</span>
+      <h1 class="font-display text-[80px] leading-tight md:text-[100px] font-extrabold tracking-tighter text-on-background uppercase">Hi, I'm<br/><span class="text-primary italic">Abdul!</span></h1>
+    </div>
+    <p class="font-body-lg text-body-lg max-w-md text-on-surface-variant">
+      B.Tech IT student building real-world AI-powered applications — from crowd safety platforms handling 30M+ pilgrims to Chrome extensions that automate job hunting with LLMs.
+    </p>
+    <div class="flex gap-4 flex-wrap">
+      <a class="brushed-aluminum cyber-accent px-10 py-5 rounded-none font-label-caps text-label-caps uppercase transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[10px_10px_0px_0px_rgba(26,28,25,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex items-center gap-2 interactive-audio" href="#works">
+        <span>View Work</span> <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <a class="px-10 py-5 border-2 border-on-background font-label-caps text-label-caps uppercase transition-all hover:bg-on-background hover:text-surface flex items-center gap-2 interactive-audio shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]" href="https://github.com/abdulaleemarshad1979" target="_blank">
+        <span class="material-symbols-outlined">code</span> GitHub
+      </a>
+    </div>
+  </div>
+  <div class="flex-1 relative vertical-line bg-surface-container-low min-h-[500px]">
+    <div class="absolute inset-0 flex items-center justify-center p-gutter">
+      <div class="relative w-full h-full border-2 border-on-background shadow-[12px_12px_0px_0px_#ccff00] flex flex-col items-center justify-center bg-surface-container gap-6 p-8">
+        <!-- Terminal-style avatar block -->
+        <div class="w-full max-w-xs border-2 border-on-background bg-on-background text-surface p-6 font-label-caps text-label-caps shadow-[6px_6px_0px_0px_#ccff00]">
+          <div class="text-primary mb-4">$ whoami</div>
+          <div class="mb-1 text-outline-variant">NAME    <span class="text-surface">Abdul Aleem Arshad</span></div>
+          <div class="mb-1 text-outline-variant">ROLE    <span class="text-primary">AI/LLM + Full-Stack Dev</span></div>
+          <div class="mb-1 text-outline-variant">COLLEGE <span class="text-surface">ACET, Andhra Pradesh</span></div>
+          <div class="mb-1 text-outline-variant">YEAR    <span class="text-surface">B.Tech IT · 2026</span></div>
+          <div class="mb-1 text-outline-variant">STATUS  <span class="text-primary-container bg-on-surface px-2">OPEN_TO_WORK</span></div>
+          <div class="mt-4 text-outline-variant">LANG    <span class="text-surface">EN · HI · UR · ES(learning)</span></div>
+        </div>
+        <div class="absolute -bottom-6 -left-6 bg-on-background text-surface px-6 py-3 font-label-caps text-label-caps uppercase">
+          Based in AP, India // 2025
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section class="min-h-screen border-b-2 border-on-background flex flex-col md:flex-row bg-surface-container" id="about">
+  <div class="md:w-1/3 p-gutter flex flex-col justify-between border-b-2 md:border-b-0 md:border-r-2 border-on-background bg-surface-bright">
+    <div>
+      <h2 class="font-display text-headline-lg text-on-background uppercase mb-8">About<br/>The Dev</h2>
+      <div class="w-12 h-2 bg-primary mb-8"></div>
+    </div>
+    <div class="font-label-caps text-label-caps space-y-4">
+      <div class="flex justify-between border-b border-outline-variant py-2">
+        <span>VERSION</span>
+        <span class="text-primary">3.0_STABLE</span>
+      </div>
+      <div class="flex justify-between border-b border-outline-variant py-2">
+        <span>ROLE</span>
+        <span>CLASS_REP · BUILDER</span>
+      </div>
+      <div class="flex justify-between border-b border-outline-variant py-2">
+        <span>HACKATHON</span>
+        <span class="text-primary">HACKRX_6.0_FINALIST</span>
+      </div>
+      <div class="flex justify-between border-b border-outline-variant py-2">
+        <span>LEADERSHIP</span>
+        <span>ASPIRE_COHORT_3</span>
+      </div>
+      <div class="flex justify-between border-b border-outline-variant py-2">
+        <span>AVAILABILITY</span>
+        <span class="text-primary-container bg-on-background px-2">OPEN_NOW</span>
+      </div>
+    </div>
+    <!-- Certifications -->
+    <div class="mt-8">
+      <div class="font-label-caps text-label-caps text-on-surface-variant mb-4">CERTIFICATIONS</div>
+      <div class="flex flex-wrap gap-2">
+        <span class="cert-badge">NVIDIA Edge AI</span>
+        <span class="cert-badge">NVIDIA Jetson</span>
+        <span class="cert-badge">HP LIFE Cyber</span>
+        <span class="cert-badge">TCS iON YP</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="md:w-2/3 p-gutter grid grid-cols-1 md:grid-cols-2 gap-gutter">
+    <div class="space-y-6">
+      <h3 class="font-headline-md text-headline-md text-on-background uppercase">The Philosophy</h3>
+      <p class="font-body-lg text-body-lg text-on-surface-variant">
+        I believe in building things that solve real problems at real scale. My work blends AI/LLM reasoning with production-grade backend engineering — always shipping, always iterating.
+      </p>
+      <div class="p-6 bg-surface border-2 border-on-background shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]">
+        <span class="material-symbols-outlined text-primary mb-4" style="font-size:48px;">psychology</span>
+        <h4 class="font-label-caps text-label-caps mb-2">AI-FIRST THINKING</h4>
+        <p class="font-body-md text-body-md">Every project starts with: can AI make this smarter? RAG, vector search, LLM APIs — wired into real backends.</p>
+      </div>
+    </div>
+    <div class="flex flex-col justify-end gap-6">
+      <div class="p-6 glass-card border-2 border-on-background shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]">
+        <span class="material-symbols-outlined text-primary mb-4" style="font-size:48px;">hub</span>
+        <h4 class="font-label-caps text-label-caps mb-2">FULL-STACK DEPTH</h4>
+        <p class="font-body-md text-body-md">FastAPI · Flask · Node.js · React · PostgreSQL · Redis · WebSocket · Docker. From DB to UI in one repo.</p>
+      </div>
+      <div class="p-6 bg-primary-container border-2 border-on-background shadow-[6px_6px_0px_0px_rgba(26,28,25,1)]">
+        <span class="material-symbols-outlined text-on-primary-container mb-4" style="font-size:48px;">bolt</span>
+        <h4 class="font-label-caps text-label-caps mb-2 text-on-primary-container">PRODUCTION GRADE</h4>
+        <p class="font-body-md text-body-md text-on-primary-container">K6 load tested. JWT RBAC. Self-healing orchestrators. I don't stop at MVP — I ship systems that hold up.</p>
+      </div>
+    </div>
+
+    <!-- Skills grid -->
+    <div class="md:col-span-2 mt-4">
+      <div class="font-label-caps text-label-caps text-on-surface-variant mb-4">[ TECH STACK ]</div>
+      <div class="flex flex-wrap gap-2">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">FastAPI</span>
+        <span class="skill-tag">Flask</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">HTML/CSS</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">MySQL</span>
+        <span class="skill-tag">Redis</span>
+        <span class="skill-tag">FAISS</span>
+        <span class="skill-tag">Groq AI</span>
+        <span class="skill-tag">OpenAI API</span>
+        <span class="skill-tag">YOLOv8</span>
+        <span class="skill-tag">WebSocket</span>
+        <span class="skill-tag">Docker</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Vercel</span>
+        <span class="skill-tag">Render</span>
+        <span class="skill-tag">Chrome MV3</span>
+        <span class="skill-tag">Whisper STT</span>
+        <span class="skill-tag">edge-tts</span>
+        <span class="skill-tag">SQLAlchemy</span>
+        <span class="skill-tag">Nginx</span>
+        <span class="skill-tag">AWS S3 / R2</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WORKS ─── -->
+<section class="p-gutter border-b-2 border-on-background bg-surface" id="works">
+  <div class="flex justify-between items-end mb-12">
+    <h2 class="font-display text-headline-lg uppercase">Selected<br/>Works</h2>
+    <div class="font-label-caps text-label-caps text-on-surface-variant pb-2">
+      [ 05 TOTAL PROJECTS ]
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+
+    <!-- Project 01 — Godavari Pushkaralu (big left) -->
+    <div class="md:col-span-8 group cursor-pointer work-item-reveal interactive-audio">
+      <a href="https://pushkara.vercel.app/user" target="_blank">
+        <div class="relative aspect-video overflow-hidden border-2 border-on-background shadow-[8px_8px_0px_0px_rgba(26,28,25,1)] transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[12px_12px_0px_0px_rgba(26,28,25,1)] bg-surface-container-highest flex flex-col items-center justify-center">
+          <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform duration-500" style="font-size:96px;">water</span>
+          <div class="mt-4 font-label-caps text-label-caps text-center px-4 text-on-surface-variant max-w-sm">Real-time crowd safety for 30M+ pilgrims across Rajahmundry ghats</div>
+          <div class="flex gap-2 mt-4 flex-wrap justify-center px-4">
+            <span class="skill-tag">FastAPI</span><span class="skill-tag">WebSocket</span><span class="skill-tag">YOLOv8</span><span class="skill-tag">Redis</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">Groq AI</span>
+          </div>
+          <div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="absolute top-4 left-4 bg-on-background text-surface px-4 py-2 font-label-caps text-label-caps">
+            01 / GODAVARI PUSHKARALU 2027
+          </div>
+          <div class="absolute top-4 right-4 bg-on-background text-surface p-2">
+            <span class="material-symbols-outlined">north_east</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Project 02 — InternAI (small right) -->
+    <div class="md:col-span-4 group cursor-pointer work-item-reveal interactive-audio">
+      <a href="https://github.com/abdulaleemarshad1979" target="_blank">
+        <div class="h-full relative overflow-hidden border-2 border-on-background shadow-[8px_8px_0px_0px_rgba(26,28,25,1)] bg-surface-container-highest flex flex-col p-8 transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[12px_12px_0px_0px_rgba(26,28,25,1)]">
+          <div class="flex-1 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary group-hover:rotate-12 transition-transform duration-500" style="font-size:96px;">smart_toy</span>
+          </div>
+          <div class="mt-auto">
+            <h3 class="font-headline-md text-headline-md uppercase">Intern AI</h3>
+            <p class="font-label-caps text-label-caps text-primary mb-2">CHROME EXTENSION · LLM AUTOMATION</p>
+            <div class="flex gap-1 flex-wrap">
+              <span class="skill-tag">MV3</span><span class="skill-tag">FAISS</span><span class="skill-tag">Groq</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Project 03 — CareBuddy / MedGuide (small left) -->
+    <div class="md:col-span-4 group cursor-pointer work-item-reveal interactive-audio">
+      <a href="https://github.com/abdulaleemarshad1979" target="_blank">
+        <div class="h-full relative overflow-hidden border-2 border-on-background shadow-[8px_8px_0px_0px_rgba(26,28,25,1)] bg-primary-container flex flex-col p-8 transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[12px_12px_0px_0px_rgba(26,28,25,1)]">
+          <span class="material-symbols-outlined text-on-primary-container mb-4 group-hover:scale-110 transition-transform duration-500" style="font-size:64px;">health_and_safety</span>
+          <h3 class="font-headline-md text-headline-md uppercase text-on-primary-container">CareBuddy AI</h3>
+          <p class="font-label-caps text-label-caps text-on-primary-container mt-1 mb-3">HACKRX 6.0 FINALIST</p>
+          <p class="font-body-md text-body-md text-on-primary-container">Multimodal medical assistant — PDF, image & web Q&A for healthcare guidance.</p>
+          <div class="flex gap-1 flex-wrap mt-4">
+            <span class="skill-tag bg-on-background text-surface border-on-primary-container">Python</span>
+            <span class="skill-tag bg-on-background text-surface border-on-primary-container">Streamlit</span>
+            <span class="skill-tag bg-on-background text-surface border-on-primary-container">LLM APIs</span>
+          </div>
+          <div class="absolute bottom-4 right-4 bg-on-background text-surface px-4 py-2 font-label-caps text-label-caps">
+            CASE STUDY
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Project 04 — Jarvis AI (big right) -->
+    <div class="md:col-span-8 group cursor-pointer work-item-reveal interactive-audio">
+      <a href="https://github.com/abdulaleemarshad1979" target="_blank">
+        <div class="relative aspect-[21/9] overflow-hidden border-2 border-on-background shadow-[8px_8px_0px_0px_rgba(26,28,25,1)] transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[12px_12px_0px_0px_rgba(26,28,25,1)] bg-on-background">
+          <div class="h-full flex items-center p-gutter">
+            <div>
+              <p class="font-label-caps text-label-caps text-primary mb-2">04 / JARVIS AI VOICE ASSISTANT</p>
+              <h3 class="font-display text-headline-lg uppercase text-surface mb-4">Fully Offline<br/>Voice AI</h3>
+              <p class="font-body-lg text-body-lg max-w-lg text-outline-variant">OpenWakeWord + Whisper STT + edge-tts + Grok API. Zero paid APIs. Runs entirely on-device.</p>
+              <div class="flex gap-2 mt-4 flex-wrap">
+                <span class="skill-tag bg-surface">Whisper</span>
+                <span class="skill-tag bg-surface">edge-tts</span>
+                <span class="skill-tag bg-surface">Silero VAD</span>
+                <span class="skill-tag bg-surface">Python</span>
+              </div>
+            </div>
+          </div>
+          <div class="absolute top-4 right-4 bg-primary text-on-primary p-4">
+            <span class="material-symbols-outlined">north_east</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Project 05 — OfflineVault -->
+    <div class="md:col-span-12 group cursor-pointer work-item-reveal interactive-audio">
+      <a href="https://github.com/abdulaleemarshad1979" target="_blank">
+        <div class="relative overflow-hidden border-2 border-on-background shadow-[8px_8px_0px_0px_rgba(26,28,25,1)] transition-all group-hover:translate-x-[-2px] group-hover:translate-y-[-2px] group-hover:shadow-[12px_12px_0px_0px_rgba(26,28,25,1)] bg-surface-container p-8 flex flex-col md:flex-row items-center gap-8">
+          <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors duration-500" style="font-size:80px;">offline_bolt</span>
+          <div>
+            <p class="font-label-caps text-label-caps text-primary mb-1">05 / OFFLINEVAULT</p>
+            <h3 class="font-headline-md text-headline-md uppercase text-on-background mb-2">Offline-First PWA</h3>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Production-grade offline web app with Service Workers, IndexedDB, Cache Storage, and a Node.js/Express backend. Three-layer architecture: server as Truth Owner, SW as Truth Cache, UI as Truth Display.</p>
+            <div class="flex gap-2 mt-4 flex-wrap">
+              <span class="skill-tag">PWA</span><span class="skill-tag">Service Workers</span><span class="skill-tag">IndexedDB</span><span class="skill-tag">Node.js</span><span class="skill-tag">Express</span>
+            </div>
+          </div>
+          <div class="md:ml-auto self-start">
+            <span class="font-label-caps text-label-caps text-on-surface-variant">FULL CASE STUDY →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="min-h-screen flex flex-col md:flex-row" id="contact">
+  <div class="flex-1 p-gutter bg-on-background text-surface flex flex-col justify-between">
+    <div>
+      <h2 class="font-display text-headline-lg uppercase mb-4">Let's build<br/>something real.</h2>
+      <p class="font-body-lg text-body-lg text-outline-variant max-w-sm">Open to internships, collaborations, and hackathon teams. I ship fast and think in systems.</p>
+    </div>
+    <div class="space-y-8">
+      <div class="group cursor-pointer interactive-audio">
+        <span class="font-label-caps text-label-caps text-primary block mb-2">EMAIL_ME</span>
+        <a href="mailto:abdulaleemarshadm@gmail.com" class="font-headline-md text-headline-md group-hover:underline underline-offset-4 decoration-primary break-all">abdulaleemarshadm@gmail.com</a>
+      </div>
+      <div class="flex gap-6 flex-wrap">
+        <a class="font-label-caps text-label-caps hover:text-primary transition-colors interactive-audio" href="https://github.com/abdulaleemarshad1979" target="_blank">GITHUB</a>
+        <a class="font-label-caps text-label-caps hover:text-primary transition-colors interactive-audio" href="https://linkedin.com/in/abdulaleemarshad-mohammed-" target="_blank">LINKEDIN</a>
+        <a class="font-label-caps text-label-caps hover:text-primary transition-colors interactive-audio" href="https://instagram.com/abdulaleemarshad" target="_blank">INSTAGRAM</a>
+        <a class="font-label-caps text-label-caps hover:text-primary transition-colors interactive-audio" href="https://pushkara.vercel.app/user" target="_blank">LIVE_PROJECT</a>
+      </div>
+    </div>
+  </div>
+  <div class="flex-1 p-gutter bg-surface flex items-center justify-center vertical-line">
+    <form class="w-full max-w-md space-y-6">
+      <div class="space-y-2">
+        <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Name</label>
+        <input class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Your Name" type="text"/>
+      </div>
+      <div class="space-y-2">
+        <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Email</label>
+        <input class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="you@example.com" type="email"/>
+      </div>
+      <div class="space-y-2">
+        <label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Message</label>
+        <textarea class="w-full bg-surface-container border-2 border-on-background p-4 font-body-md focus:outline-none focus:ring-0 focus:border-primary shadow-inner" placeholder="Tell me about your project or opportunity..." rows="4"></textarea>
+      </div>
+      <button class="w-full brushed-aluminum cyber-accent p-6 font-label-caps text-label-caps uppercase transition-all hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[10px_10px_0px_0px_rgba(26,28,25,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none interactive-audio" type="submit">
+        <span>Send Transmission</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- Bottom Navigation (Mobile Only) -->
+<div class="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50 liquid-container">
+  <div class="bloom-highlight absolute inset-0 rounded-full"></div>
+  <nav class="flex gap-8 items-center bg-surface/30 backdrop-blur-2xl rounded-full border-2 border-on-background px-6 py-3 shadow-[4px_4px_0px_0px_rgba(26,28,25,1)] relative" id="mobile-nav">
+    <a class="nav-icon bg-primary-container text-on-primary-container rounded-full p-3 shadow-inner transition-all duration-300 interactive-audio" href="#hero">
+      <span class="material-symbols-outlined">home</span>
+    </a>
+    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#works">
+      <span class="material-symbols-outlined">work</span>
+    </a>
+    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#about">
+      <span class="material-symbols-outlined">bolt</span>
+    </a>
+    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#contact">
+      <span class="material-symbols-outlined">person</span>
+    </a>
+  </nav>
+</div>
+
+<!-- Footer -->
+<footer class="p-gutter border-t-2 border-on-background flex justify-between items-center bg-surface-container-low font-label-caps text-label-caps flex-wrap gap-4">
+  <div>© 2025 ABDUL_ALEEM_ARSHAD / ALL_RIGHTS_RESERVED</div>
+  <div class="flex gap-4 flex-wrap">
+    <a href="https://github.com/abdulaleemarshad1979" target="_blank" class="hover:text-primary transition-colors">GITHUB</a>
+    <a href="https://linkedin.com/in/abdulaleemarshad-mohammed-" target="_blank" class="hover:text-primary transition-colors">LINKEDIN</a>
+    <span>HACKRX_6.0_FINALIST</span>
+    <span class="text-primary-container bg-on-background px-2">v3.0.0</span>
+  </div>
+</footer>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Audio Feedback
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  function playClickSound() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+  }
+  document.querySelectorAll('.interactive-audio, button, a, [type="submit"], .group.cursor-pointer').forEach(el => {
+    ['click','touchstart'].forEach(evt => {
+      el.addEventListener(evt, (e) => {
+        if (evt === 'touchstart') playClickSound();
+        else if (evt === 'click' && e.pointerType !== 'touch') playClickSound();
+      }, { passive: true });
+    });
+  });
+
+  // Header scroll
+  ScrollTrigger.create({
+    start: 'top -50',
+    onUpdate: (self) => {
+      const header = document.getElementById('top-app-bar');
+      if (self.direction === 1) gsap.to(header, { yPercent: -100, duration: 0.3 });
+      else gsap.to(header, { yPercent: 0, duration: 0.3, ease: "power2.out" });
+    }
+  });
+
+  // Works reveal
+  gsap.timeline({
+    scrollTrigger: { trigger: "#works", start: "top 70%", toggleActions: "play none none none" }
+  }).fromTo(".work-item-reveal",
+    { opacity: 0, y: 100, scale: 0.8, rotationX: -15, rotationY: 10 },
+    { opacity: 1, y: 0, scale: 1, rotationX: 0, rotationY: 0, duration: 1.2, stagger: 0.15, ease: "elastic.out(1, 0.75)", clearProps: "transform" }
+  );
+
+  // Nav active state
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const mobileNav = document.getElementById('mobile-nav');
+  const mobileIcons = document.querySelectorAll('.nav-icon');
+  const bloom = document.querySelector('.bloom-highlight');
+  let lastSection = '';
+
+  const updateNav = () => {
+    let current = '';
+    sections.forEach(s => { if (window.pageYOffset >= (s.offsetTop - 250)) current = s.getAttribute('id'); });
+    if (current !== lastSection) {
+      navLinks.forEach(link => {
+        link.classList.remove('text-primary', 'underline', 'decoration-4', 'underline-offset-8');
+        link.classList.add('text-on-surface-variant');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.remove('text-on-surface-variant');
+          link.classList.add('text-primary', 'underline', 'decoration-4', 'underline-offset-8');
+        }
+      });
+      if (window.innerWidth < 768 && mobileNav) {
+        const idx = Array.from(mobileIcons).findIndex(i => i.getAttribute('href') === `#${current}`);
+        if (idx !== -1) {
+          const active = mobileIcons[idx];
+          mobileIcons.forEach(i => { i.classList.remove('bg-primary-container','text-on-primary-container','shadow-inner'); i.classList.add('opacity-70'); });
+          const tl = gsap.timeline();
+          tl.to(mobileNav, { scaleX: 1.1, scaleY: 0.9, duration: 0.2, ease: "expo.inOut" })
+            .to(bloom, { opacity: 0.8, scale: 1.5, duration: 0.1, x: (idx - 1.5) * 40 }, 0)
+            .add(() => { active.classList.add('bg-primary-container','text-on-primary-container','shadow-inner'); active.classList.remove('opacity-70'); })
+            .to(mobileNav, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "back.out(1.7)" })
+            .to(bloom, { opacity: 0, duration: 0.4 }, "-=0.3");
+        }
+      }
+      lastSection = current;
+    }
+  };
+  window.addEventListener('scroll', updateNav);
+
+  // Liquid ripple buttons
+  const rippleDisplace = document.getElementById('ripple-displace');
+  const rippleTurb = document.getElementById('ripple-turb');
+  document.querySelectorAll('.brushed-aluminum').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      gsap.to(rippleDisplace, { attr: { scale: 12 }, duration: 0.4, ease: "power2.out" });
+      gsap.to(rippleTurb, { attr: { baseFrequency: 0.03 }, duration: 0.4 });
+    });
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(rippleDisplace, { attr: { scale: 0 }, duration: 0.6, ease: "power2.in" });
+      gsap.to(rippleTurb, { attr: { baseFrequency: 0.01 }, duration: 0.6 });
+    });
+    btn.addEventListener('mousedown', () => {
+      gsap.fromTo(rippleDisplace, { attr: { scale: 30 } }, { attr: { scale: 12 }, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+    });
+  });
+
+  // Card hover
+  document.querySelectorAll('.group').forEach(card => {
+    card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.01, duration: 0.3, ease: "power2.out" }));
+    card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(2)" }));
+  });
+</script>
+</body></html>
