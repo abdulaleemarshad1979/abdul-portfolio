@@ -265,7 +265,23 @@
     #liquid-scrollbar .lg-thumb .lg-arrow { position: relative; z-index: 2; font-size: 16px; }
 
     @media (max-width: 768px) {
-        #liquid-scrollbar { display: none; }
+        #liquid-scrollbar {
+            width: 10px;
+            right: 8px;
+            height: 38vh;
+            max-height: 280px;
+        }
+        #liquid-scrollbar .lg-thumb {
+            left: -16px; right: -16px;
+            height: 44px;
+            font-size: 9px;
+            box-shadow:
+                inset 0 2px 4px rgba(255,255,255,0.7),
+                inset 0 -2px 4px rgba(26,28,25,0.15),
+                0 4px 14px rgba(26,28,25,0.25),
+                2px 2px 0 0 rgba(26,28,25,0.9);
+        }
+        #liquid-scrollbar .lg-thumb .material-symbols-outlined { font-size: 14px; }
     }
 
     #liquid-scrollbar .lg-thumb {
@@ -653,6 +669,119 @@
 
     @media (prefers-reduced-motion: reduce) {
         #intro-overlay { display: none !important; }
+    }
+
+    /* ─── Mobile-First Polish & Smoothness ─── */
+    html { -webkit-tap-highlight-color: transparent; }
+    body {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Touch ripple for interactive elements */
+    .touch-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(204,255,0,0.55);
+        transform: scale(0);
+        animation: rippleAnim 0.65s cubic-bezier(.2,.8,.2,1) forwards;
+        pointer-events: none;
+        mix-blend-mode: multiply;
+        z-index: 5;
+    }
+    @keyframes rippleAnim {
+        to { transform: scale(3.5); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+        /* Lighter aurora blur on mobile for buttery 60fps */
+        .aurora .blob { filter: blur(40px); opacity: 0.3; }
+        .aurora .b1 { width: 280px; height: 280px; }
+        .aurora .b2 { width: 260px; height: 260px; }
+        .aurora .b3 { width: 220px; height: 220px; }
+        .aurora .b4 { width: 180px; height: 180px; }
+
+        /* Hero typography rebalance */
+        #hero { padding-top: 88px; min-height: auto; }
+        #hero h1 { font-size: 56px !important; line-height: 0.95 !important; }
+        #hero .font-body-lg { font-size: 16px; line-height: 1.55; }
+        #hero .vertical-line { border-left: 0; border-top: 2px solid #1a1c19; min-height: 440px; }
+
+        /* Terminal card spacing fix */
+        #hero .float-y { padding: 1.25rem !important; }
+        #hero .float-y .max-w-xs { padding: 1.25rem; }
+        #hero .float-y .absolute.-bottom-6 { padding: 8px 14px; font-size: 10px; bottom: -16px; left: -10px; }
+
+        /* About section */
+        #about h2 { font-size: 40px; line-height: 1; }
+        #about .grid { gap: 16px; }
+
+        /* Works headline */
+        #works h2 { font-size: 40px; line-height: 1; }
+        #works .grid { gap: 16px; }
+
+        /* Contact headline */
+        #contact h2 { font-size: 40px; line-height: 1; }
+        #contact .vertical-line { border-left: 0; border-top: 2px solid #1a1c19; }
+
+        /* Footer wraps cleanly */
+        footer { font-size: 10px; }
+
+        /* Headline mobile size */
+        .text-headline-md, .font-headline-md { font-size: 24px !important; line-height: 1.2 !important; }
+        .text-headline-lg { font-size: 40px !important; line-height: 1.05 !important; }
+
+        /* Buttons full-width feel */
+        #hero a.brushed-aluminum, #hero a[href*="github"] {
+            padding: 16px 24px;
+            flex: 1 1 auto;
+            justify-content: center;
+        }
+
+        /* Glass nav padding tighter */
+        #top-app-bar { padding: 10px 16px; }
+        #top-app-bar .brand-word { font-size: 18px; }
+        #top-app-bar .brand-caret { width: 8px; height: 18px; }
+
+        /* Skill tags more compact */
+        .skill-tag { padding: 3px 10px; font-size: 10px; }
+        .cert-badge { padding: 5px 12px; font-size: 9px; }
+
+        /* Live pill */
+        .live-pill { padding: 3px 10px; font-size: 9px; }
+
+        /* Hide cursor blob on mobile */
+        #liquid-cursor { display: none !important; }
+
+        /* Smooth scroll feel */
+        section { scroll-margin-top: 80px; }
+    }
+
+    @media (max-width: 480px) {
+        #hero h1 { font-size: 48px !important; }
+        .text-headline-lg { font-size: 34px !important; }
+        #top-app-bar .brand-word { font-size: 16px; }
+    }
+
+    /* Prevent jitter from heavy filters on mobile */
+    @media (max-width: 768px) and (pointer: coarse) {
+        .glass-card-v2, .glass-nav, #mobile-drawer {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    }
+
+    /* Group tap feedback (touch devices) */
+    @media (pointer: coarse) {
+        .work-item-reveal:active a > div {
+            transform: translate(-2px, -2px) scale(0.99);
+            transition: transform 0.18s ease-out;
+        }
+        .skill-tag:active, .cert-badge:active {
+            transform: translate(-2px, -2px) scale(0.96);
+        }
     }
 </style>
 </head>
@@ -1050,25 +1179,6 @@
 
 </main>
 
-<!-- Bottom Navigation (Mobile Only) -->
-<div class="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 z-50 liquid-container">
-  <div class="bloom-highlight absolute inset-0 rounded-full"></div>
-  <nav class="flex gap-8 items-center bg-surface/30 backdrop-blur-2xl rounded-full border-2 border-on-background px-6 py-3 shadow-[4px_4px_0px_0px_rgba(26,28,25,1)] relative" id="mobile-nav">
-    <a class="nav-icon bg-primary-container text-on-primary-container rounded-full p-3 shadow-inner transition-all duration-300 interactive-audio" href="#hero">
-      <span class="material-symbols-outlined">home</span>
-    </a>
-    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#works">
-      <span class="material-symbols-outlined">work</span>
-    </a>
-    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#about">
-      <span class="material-symbols-outlined">bolt</span>
-    </a>
-    <a class="nav-icon text-on-surface p-3 opacity-70 transition-all duration-300 interactive-audio" href="#contact">
-      <span class="material-symbols-outlined">person</span>
-    </a>
-  </nav>
-</div>
-
 <!-- Footer -->
 <footer class="p-gutter border-t-2 border-on-background flex justify-between items-center bg-surface-container-low font-label-caps text-label-caps flex-wrap gap-4">
   <div>© 2025 ABDUL_ALEEM_ARSHAD / ALL_RIGHTS_RESERVED</div>
@@ -1200,9 +1310,6 @@
   // Nav active state
   const sections = document.querySelectorAll('section');
   const navLinks = document.querySelectorAll('.nav-link');
-  const mobileNav = document.getElementById('mobile-nav');
-  const mobileIcons = document.querySelectorAll('.nav-icon');
-  const bloom = document.querySelector('.bloom-highlight');
   let lastSection = '';
 
   const updateNav = () => {
@@ -1217,19 +1324,6 @@
           link.classList.add('text-primary', 'underline', 'decoration-4', 'underline-offset-8');
         }
       });
-      if (window.innerWidth < 768 && mobileNav) {
-        const idx = Array.from(mobileIcons).findIndex(i => i.getAttribute('href') === `#${current}`);
-        if (idx !== -1) {
-          const active = mobileIcons[idx];
-          mobileIcons.forEach(i => { i.classList.remove('bg-primary-container','text-on-primary-container','shadow-inner'); i.classList.add('opacity-70'); });
-          const tl = gsap.timeline();
-          tl.to(mobileNav, { scaleX: 1.1, scaleY: 0.9, duration: 0.2, ease: "expo.inOut" })
-            .to(bloom, { opacity: 0.8, scale: 1.5, duration: 0.1, x: (idx - 1.5) * 40 }, 0)
-            .add(() => { active.classList.add('bg-primary-container','text-on-primary-container','shadow-inner'); active.classList.remove('opacity-70'); })
-            .to(mobileNav, { scaleX: 1, scaleY: 1, duration: 0.6, ease: "back.out(1.7)" })
-            .to(bloom, { opacity: 0, duration: 0.4 }, "-=0.3");
-        }
-      }
       lastSection = current;
     }
   };
@@ -1468,6 +1562,103 @@
       { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(2)", delay: (i % 12) * 0.04,
         scrollTrigger: { trigger: tag, start: "top 92%", once: true } }
     );
+  });
+
+  // ─── MOBILE: Touch Ripple Feedback ────────────────────────────────────────
+  if (isCoarse) {
+    const rippleSel = 'a, button, .skill-tag, .cert-badge, .work-item-reveal, [type="submit"]';
+    document.addEventListener('touchstart', (e) => {
+      const target = e.target.closest(rippleSel);
+      if (!target) return;
+      const rect = target.getBoundingClientRect();
+      const t = e.touches[0];
+      const size = Math.max(rect.width, rect.height) * 0.6;
+      const ripple = document.createElement('span');
+      ripple.className = 'touch-ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (t.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top  = (t.clientY - rect.top  - size / 2) + 'px';
+      const prevPos = getComputedStyle(target).position;
+      if (prevPos === 'static') target.style.position = 'relative';
+      const prevOverflow = getComputedStyle(target).overflow;
+      if (prevOverflow === 'visible') target.style.overflow = 'hidden';
+      target.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }, { passive: true });
+  }
+
+  // ─── MOBILE: Device Orientation Tilt for Work Cards ───────────────────────
+  if (isCoarse && window.DeviceOrientationEvent) {
+    const tiltCards = [];
+    document.querySelectorAll('.work-item-reveal').forEach(wrap => {
+      const card = wrap.querySelector('a > div');
+      if (!card) return;
+      wrap.style.perspective = '1200px';
+      card.style.transformStyle = 'preserve-3d';
+      card.style.willChange = 'transform';
+      tiltCards.push(card);
+    });
+
+    // Hero terminal too
+    const heroTerm = document.querySelector('#hero .float-y');
+    if (heroTerm) {
+      heroTerm.style.transformStyle = 'preserve-3d';
+      heroTerm.style.willChange = 'transform';
+      tiltCards.push(heroTerm);
+    }
+
+    let baseBeta = null, baseGamma = null;
+    const handleTilt = (e) => {
+      if (e.beta == null || e.gamma == null) return;
+      if (baseBeta == null)  baseBeta  = e.beta;
+      if (baseGamma == null) baseGamma = e.gamma;
+      const dx = Math.max(-15, Math.min(15, e.gamma - baseGamma));
+      const dy = Math.max(-15, Math.min(15, e.beta  - baseBeta));
+      tiltCards.forEach(card => {
+        // Only tilt cards in viewport for perf
+        const r = card.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        gsap.to(card, {
+          rotationX: -dy * 0.35,
+          rotationY:  dx * 0.45,
+          duration: 0.6, ease: "power3.out",
+          transformPerspective: 1200,
+          overwrite: 'auto'
+        });
+      });
+    };
+
+    const startTilt = () => window.addEventListener('deviceorientation', handleTilt, { passive: true });
+
+    // iOS 13+ requires permission
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      const askOnce = () => {
+        DeviceOrientationEvent.requestPermission().then(state => {
+          if (state === 'granted') startTilt();
+        }).catch(() => {});
+        document.removeEventListener('touchend', askOnce);
+      };
+      document.addEventListener('touchend', askOnce, { once: true });
+    } else {
+      startTilt();
+    }
+  }
+
+  // ─── MOBILE: Smooth momentum touch-magnetic on primary CTAs ──────────────
+  if (isCoarse) {
+    document.querySelectorAll('.brushed-aluminum, button[type="submit"]').forEach(btn => {
+      btn.addEventListener('touchstart', () => {
+        gsap.to(btn, { scale: 0.96, duration: 0.18, ease: "power2.out" });
+      }, { passive: true });
+      btn.addEventListener('touchend', () => {
+        gsap.to(btn, { scale: 1, duration: 0.45, ease: "elastic.out(1, 0.5)" });
+      }, { passive: true });
+    });
+  }
+
+  // ─── Refresh ScrollTrigger on orientation change ──────────────────────────
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => ScrollTrigger.refresh(), 250);
   });
 </script>
 </body></html>
