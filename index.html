@@ -160,12 +160,135 @@
         box-shadow: 3px 3px 0 0 #1a1c19;
         text-transform: uppercase;
     }
+
+    /* ─── Hide native scrollbar (replaced by liquid-glass custom scrollbar) ─── */
+    html { scrollbar-width: none; -ms-overflow-style: none; }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+    /* ─── Liquid Glass Scrollbar ─── */
+    #liquid-scrollbar {
+        position: fixed;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 50vh;
+        max-height: 420px;
+        z-index: 90;
+        pointer-events: auto;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    #liquid-scrollbar.is-active { opacity: 1; }
+
+    /* The translucent rail behind the thumb */
+    #liquid-scrollbar .lg-rail {
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.18);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(26,28,25,0.15);
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.6),
+            inset 0 -1px 0 rgba(0,0,0,0.05),
+            0 4px 20px rgba(26,28,25,0.08);
+        overflow: hidden;
+    }
+    #liquid-scrollbar .lg-rail::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg,
+            rgba(255,255,255,0.4) 0%,
+            rgba(255,255,255,0.05) 30%,
+            rgba(255,255,255,0.05) 70%,
+            rgba(255,255,255,0.3) 100%);
+        pointer-events: none;
+    }
+
+    /* The liquid-glass thumb pill that carries the section icon */
+    #liquid-scrollbar .lg-thumb {
+        position: absolute;
+        left: -22px;
+        right: -22px;
+        top: 0;
+        height: 58px;
+        border-radius: 999px;
+        background: linear-gradient(135deg,
+            rgba(204,255,0,0.85) 0%,
+            rgba(171,214,0,0.95) 50%,
+            rgba(204,255,0,0.85) 100%);
+        backdrop-filter: blur(14px) saturate(200%);
+        -webkit-backdrop-filter: blur(14px) saturate(200%);
+        border: 2px solid #1a1c19;
+        box-shadow:
+            inset 0 2px 4px rgba(255,255,255,0.7),
+            inset 0 -2px 4px rgba(26,28,25,0.15),
+            0 6px 20px rgba(26,28,25,0.25),
+            3px 3px 0 0 rgba(26,28,25,0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: #161e00;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        will-change: transform;
+        pointer-events: auto;
+        cursor: grab;
+        overflow: hidden;
+    }
+    #liquid-scrollbar .lg-thumb::before {
+        content: "";
+        position: absolute;
+        top: 2px; left: 6px; right: 6px;
+        height: 30%;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+        pointer-events: none;
+    }
+    #liquid-scrollbar .lg-thumb::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 50%);
+        mix-blend-mode: overlay;
+        pointer-events: none;
+    }
+    #liquid-scrollbar .lg-thumb:active { cursor: grabbing; }
+    #liquid-scrollbar .lg-thumb .lg-label { position: relative; z-index: 2; }
+    #liquid-scrollbar .lg-thumb .material-symbols-outlined {
+        position: relative; z-index: 2;
+        font-size: 18px;
+        font-variation-settings: "FILL" 1, "wght" 600;
+    }
+    #liquid-scrollbar .lg-thumb .lg-arrow { position: relative; z-index: 2; font-size: 16px; }
+
+    @media (max-width: 768px) {
+        #liquid-scrollbar { display: none; }
+    }
 </style>
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
 
 <!-- Global Noise Overlay -->
 <div class="fixed inset-0 z-[100] noise-overlay"></div>
+
+<!-- ─── Liquid Glass Scrollbar (replaces native scrollbar) ─── -->
+<div id="liquid-scrollbar" aria-hidden="true">
+  <div class="lg-rail"></div>
+  <div class="lg-thumb" id="lg-thumb">
+    <span class="lg-label" id="lg-label">HOME</span>
+    <span class="material-symbols-outlined" id="lg-icon">home</span>
+    <span class="lg-arrow material-symbols-outlined">arrow_forward</span>
+  </div>
+</div>
 
 <!-- SVG Filters -->
 <svg class="hidden" preserveaspectratio="none" viewbox="0 0 100 100">
@@ -634,5 +757,94 @@
     card.addEventListener('mouseenter', () => gsap.to(card, { scale: 1.01, duration: 0.3, ease: "power2.out" }));
     card.addEventListener('mouseleave', () => gsap.to(card, { scale: 1, duration: 0.4, ease: "back.out(2)" }));
   });
+
+  // ─── Liquid Glass Scrollbar ─────────────────────────────────────────────
+  const lgBar    = document.getElementById('liquid-scrollbar');
+  const lgThumb  = document.getElementById('lg-thumb');
+  const lgIcon   = document.getElementById('lg-icon');
+  const lgLabel  = document.getElementById('lg-label');
+
+  const sectionMeta = {
+    hero:    { icon: 'home',   label: 'HOME'   },
+    about:   { icon: 'bolt',   label: 'ABOUT'  },
+    works:   { icon: 'work',   label: 'WORKS'  },
+    contact: { icon: 'person', label: 'CONTACT'}
+  };
+
+  let idleTimer;
+  const showBar = () => {
+    lgBar.classList.add('is-active');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => lgBar.classList.remove('is-active'), 1400);
+  };
+
+  const updateLiquidScrollbar = () => {
+    const docH    = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docH > 0 ? window.scrollY / docH : 0;
+    const railH   = lgBar.clientHeight;
+    const thumbH  = lgThumb.offsetHeight;
+    const y       = progress * (railH - thumbH);
+    gsap.to(lgThumb, { y, duration: 0.4, ease: "power3.out", overwrite: "auto" });
+
+    // pick section under viewport center
+    let current = 'hero';
+    document.querySelectorAll('section').forEach(s => {
+      if (window.scrollY >= s.offsetTop - 250) current = s.id;
+    });
+    const meta = sectionMeta[current] || sectionMeta.hero;
+    if (lgIcon.textContent !== meta.icon) {
+      gsap.fromTo(lgThumb,
+        { scale: 0.85 },
+        { scale: 1, duration: 0.5, ease: "elastic.out(1.2, 0.5)" }
+      );
+      lgIcon.textContent  = meta.icon;
+      lgLabel.textContent = meta.label;
+    }
+    showBar();
+  };
+
+  window.addEventListener('scroll', updateLiquidScrollbar, { passive: true });
+  window.addEventListener('resize', updateLiquidScrollbar);
+  updateLiquidScrollbar();
+
+  // Drag-to-scroll on the liquid thumb
+  let dragging = false, dragStartY = 0, dragStartScroll = 0;
+  lgThumb.addEventListener('mousedown', (e) => {
+    dragging = true;
+    dragStartY = e.clientY;
+    dragStartScroll = window.scrollY;
+    document.body.style.userSelect = 'none';
+    gsap.to(lgThumb, { scale: 1.08, duration: 0.2, ease: "power2.out" });
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const railH = lgBar.clientHeight - lgThumb.offsetHeight;
+    const docH  = document.documentElement.scrollHeight - window.innerHeight;
+    const dy    = e.clientY - dragStartY;
+    const scrollDelta = (dy / railH) * docH;
+    window.scrollTo({ top: dragStartScroll + scrollDelta, behavior: 'auto' });
+  });
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    document.body.style.userSelect = '';
+    gsap.to(lgThumb, { scale: 1, duration: 0.4, ease: "back.out(2)" });
+  });
+
+  // Click on rail to jump
+  lgBar.addEventListener('click', (e) => {
+    if (e.target.closest('.lg-thumb')) return;
+    const rect = lgBar.getBoundingClientRect();
+    const ratio = (e.clientY - rect.top) / rect.height;
+    const target = ratio * (document.documentElement.scrollHeight - window.innerHeight);
+    window.scrollTo({ top: target, behavior: 'smooth' });
+  });
+
+  // Show on any user-input scroll attempt (mobile/desktop)
+  ['wheel','touchmove','keydown'].forEach(evt =>
+    window.addEventListener(evt, showBar, { passive: true })
+  );
+
 </script>
 </body></html>
